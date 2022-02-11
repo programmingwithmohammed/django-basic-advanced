@@ -11,6 +11,11 @@
 {% endblock %}
 
 {% block content %}
+
+<div class="mb-4">
+  <a href="{% url 'new_board_topic' chat_board.pk %}" class="btn btn-primary">New topic</a>
+</div>
+
 <table class="table">
     <thead class="thead-inverse">
       <tr>
@@ -22,7 +27,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for topic in boardName.topics.all %}
+      {% for topic in chat_board.topics.all %}
         <tr>
           <td>{{ topic.subject }}</td>
           <td>{{ topic.boardStarter.username }}</td>
