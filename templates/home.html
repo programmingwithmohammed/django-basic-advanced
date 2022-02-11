@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Chat Boards</li>
+{% endblock %}
+
+{% block content %}
+      <table class="table">
+        <thead class="thead-inverse">
+          <tr>
+            <th>Board Name</th>
+            <th>Posts</th>
+            <th>Topics</th>
+            <th>Last Post</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for board in chatBoard %}
+            <tr>
+                <td>
+                  {{ board.name }}
+                  <small class="text-muted d-block">{{ board.details }}</small>
+                </td>
+                <td class="align-middle">0</td>
+                <td class="align-middle">0</td>
+                <td>
+                </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+      </table>
+{% endblock %}
