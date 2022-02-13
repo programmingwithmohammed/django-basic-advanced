@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from webchat import views
+from accounts import views as accounts_views
 
 #https://docs.djangoproject.com/en/4.0/topics/http/urls/
 urlpatterns = [
@@ -24,7 +25,7 @@ urlpatterns = [
     #path('homepage/', views.homepage, name='homepage'),
     path('', views.home, name='home'),#default home page path
     path('home/', views.home, name='home'),
-
+    re_path(r'^signup/$',accounts_views.signup, name='signup'),
     #path('board_topic/', views.board_topic, name='board_topic'),
     re_path(r'^board_topic/(?P<pk>\d+)/$', views.board_topic, name='board_topic'),
     re_path(r'^board_topic/(?P<pk>\d+)/new/$', views.new_board_topic, name='new_board_topic'),

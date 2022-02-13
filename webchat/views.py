@@ -42,3 +42,4 @@ def new_board_topic(request, pk):
         form = NewChatTopicForm()
 
     return render(request, 'new_board_topic.html', {'chat_board':chat_board, 'form':form})
+
