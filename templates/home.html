@@ -18,12 +18,29 @@
             {% for board in chatBoard %}
             <tr>
                 <td>
-                  {{ board.name }}
+                  <a href="{% url 'board_topic' board.pk %}">{{ board.name }}</a>
                   <small class="text-muted d-block">{{ board.details }}</small>
                 </td>
-                <td class="align-middle">0</td>
-                <td class="align-middle">0</td>
-                <td>
+                <td class="align-middle">
+                    {{ board.get_posts_count }}
+                </td>
+                <td class="align-middle">
+                    {{ board.topics.count }}
+                </td>
+                <td class="align-middle">
+                    {% with post=board.get_last_post %}
+                        {% if post %}
+                            <small>
+                                <a href="{% url 'topic_posts' board.pk post.topic.pk %}">
+                                By {{ post.createdBy.username }} at {{ post.createdAt }}
+                                </a>
+                            </small>
+                        {% else %}
+                            <small class="text-muted">
+                                <em>No posts yet here.</em>
+                            </small>
+                        {% endif %}
+                    {% endwith %}
                 </td>
             </tr>
           {% endfor %}

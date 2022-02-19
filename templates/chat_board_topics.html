@@ -27,12 +27,12 @@
       </tr>
     </thead>
     <tbody>
-      {% for topic in chat_board.topics.all %}
+      {% for topic in topics %}
         <tr>
           <td><a href="{% url 'topic_posts' chat_board.pk topic.pk %}">{{ topic.subject }}</td>
           <td>{{ topic.boardStarter.username }}</td>
-          <td>0</td>
-          <td>0</td>
+          <td>{{ topic.replies }}</td>
+          <td>{{ topic.views }}</td>
           <td>{{ topic.lastUpdate }}</td>
         </tr>
       {% endfor %}

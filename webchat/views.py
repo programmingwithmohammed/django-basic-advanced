@@ -9,6 +9,7 @@ from .models import Post
 from django.contrib.auth.models import User
 from .forms import NewChatTopicForm, PostForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 
 
@@ -19,7 +20,8 @@ def home(request):
 def board_topic(request,pk):
     #chat_board = ChatBoard.objects.get(pk=pk)
     chat_board = get_object_or_404(ChatBoard, pk=pk)
-    return render(request, 'chat_board_topics.html', {'chat_board': chat_board})
+    topics = chat_board.topics.order_by('-lastUpdate').annotate(replies=Count('posts')-1)
+    return render(request, 'chat_board_topics.html', {'chat_board': chat_board, 'topics':topics})
 
 @login_required
 def new_board_topic(request, pk):
@@ -48,6 +50,8 @@ def new_board_topic(request, pk):
 
 def topic_posts(request, pk, topic_pk):
     topic = get_object_or_404(ChatTopic, boardName__pk=pk, pk=topic_pk )
+    topic.views += 1
+    topic.save()
     return render(request, 'topic_posts.html', {'topic':topic})
 
 @login_required
