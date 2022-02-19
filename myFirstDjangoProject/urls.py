@@ -66,11 +66,14 @@ urlpatterns = [
     re_path(r'^board_topic/(?P<pk>\d+)/new/$', views.new_board_topic, name='new_board_topic'),
 
     #both url path will work
-    re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d)/$',
+    re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$',
             views.topic_posts, name='topic_posts'),
 
     # path(r'^board_topic/int:pk/topics/int:topic_pk/',
     #         views.topic_posts, name='topic_posts'),
+
+    re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$',
+            views.reply_topic, name='reply_topic'),
 
     path('admin/', admin.site.urls),
 

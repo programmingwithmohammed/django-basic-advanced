@@ -17,8 +17,8 @@ class ChatTopic(models.Model):
 
 class Post(models.Model):
     message = models.TextField(max_length = 5000)
-    topic = models.ForeignKey(ChatTopic, related_name = 'post',on_delete=models.CASCADE)
+    topic = models.ForeignKey(ChatTopic, related_name = 'posts',on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add = True)
     updatedAt = models.DateTimeField(null = True)
-    createdBy = models.ForeignKey(User, related_name = 'post',on_delete=models.CASCADE)
+    createdBy = models.ForeignKey(User, related_name = 'posts',on_delete=models.CASCADE)
     updatedBy = models.ForeignKey(User, null = True, related_name = '+',on_delete=models.CASCADE)

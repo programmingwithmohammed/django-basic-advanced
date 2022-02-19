@@ -7,7 +7,7 @@ from .models import ChatBoard
 from .models import ChatTopic
 from .models import Post
 from django.contrib.auth.models import User
-from .forms import NewChatTopicForm
+from .forms import NewChatTopicForm, PostForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -38,12 +38,30 @@ def new_board_topic(request, pk):
                 topic=topic,
                 createdBy=request.user
                 )
-            return redirect('board_topic', pk=chat_board.pk)
+            return redirect('topic_posts', pk=pk,topic_pk=topic.pk)
     else:
         form = NewChatTopicForm()
 
     return render(request, 'new_board_topic.html', {'chat_board':chat_board, 'form':form})
 
+
+
 def topic_posts(request, pk, topic_pk):
-    topic = get_object_or_404(ChatTopic, boardName=pk, pk=topic_pk )
+    topic = get_object_or_404(ChatTopic, boardName__pk=pk, pk=topic_pk )
     return render(request, 'topic_posts.html', {'topic':topic})
+
+@login_required
+def reply_topic(request, pk, topic_pk):
+    topic = get_object_or_404(ChatTopic, boardName__pk=pk, pk=topic_pk )
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.topic = topic
+            post.createdBy = request.user
+            post.save()
+            return redirect('topic_posts', pk=pk, topic_pk=topic_pk)
+    else:
+        form = PostForm()
+    return render(request,'reply_topic.html', {'topic':topic, 'form':form})
+

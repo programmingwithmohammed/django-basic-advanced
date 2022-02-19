@@ -29,7 +29,7 @@
     <tbody>
       {% for topic in chat_board.topics.all %}
         <tr>
-          <td>{{ topic.subject }}</td>
+          <td><a href="{% url 'topic_posts' chat_board.pk topic.pk %}">{{ topic.subject }}</td>
           <td>{{ topic.boardStarter.username }}</td>
           <td>0</td>
           <td>0</td>

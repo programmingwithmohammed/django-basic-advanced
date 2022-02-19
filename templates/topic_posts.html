@@ -1,5 +1,7 @@
 {% extends 'base.html'%}
 
+{% load static %}
+
 {% block title %} {{ topic.subject }} {% endblock %}
 
 {% block breadcrumb %}
@@ -11,4 +13,39 @@
 
 {% block content %}
 
+  <div class="mb-4">
+    <a href="#" class="btn btn-primary" role="button">Reply</a>
+  </div>
+
+  {% for post in topic.posts.all %}
+    <div class="card mb-2">
+      <div class="card-body p-3">
+        <div class="row">
+              <div class="col-2">
+                  <img src="{% static 'img/member.png' %}" alt="{{ post.createdBy.username }}" class="w-100"/>
+                    <small>Posts: {{ post.createdBy.posts.count }}</small>
+              </div>
+          <div class="col-10">
+                <div class="row mb-3">
+                      <div class="col-6">
+                        <strong class="text-muted">{{ post.createdBy.username }}</strong>
+                      </div>
+                      <div class="col-6 text-right">
+                        <small class="text-muted">{{ post.createdAt }}</small>
+                      </div>
+                </div>
+            {{ post.message }}
+            {% if post.createdBy == user %}
+                  <div class="mt-3">
+                    <a href="#" class="btn btn-primary btn-sm" role="button">Edit</a>
+                  </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
 {% endblock %}
+
+  <!--https://www.iconfinder.com/search/icons?q=avatar&price=free&license=2-->

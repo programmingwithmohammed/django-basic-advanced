@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from .models import ChatTopic
+from .models import Post
+
+
 
 class NewChatTopicForm(forms.ModelForm):
     message = forms.CharField(
@@ -16,5 +19,8 @@ class NewChatTopicForm(forms.ModelForm):
         fields = ['subject', 'message']
 
 
-
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['message']
 
