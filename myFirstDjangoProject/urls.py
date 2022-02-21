@@ -19,11 +19,12 @@ from django.urls import path, re_path
 from webchat import views
 from accounts import views as accounts_views
 from django.contrib.auth import views as auth_views
+from django.urls import path
+
+
 
 #https://docs.djangoproject.com/en/4.0/topics/http/urls/
 urlpatterns = [
-
-
     path('', views.home, name='home'),#default home page path
     path('home/', views.home, name='home'),
     re_path(r'^signup/$',accounts_views.signup, name='signup'),
@@ -74,6 +75,10 @@ urlpatterns = [
 
     re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$',
             views.reply_topic, name='reply_topic'),
+
+    re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
+            views.PostUpdateView.as_view(),
+            name='edit_post'),
 
     path('admin/', admin.site.urls),
 
