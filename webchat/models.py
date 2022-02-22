@@ -50,8 +50,6 @@ class ChatTopic(models.Model):
     def get_last_five_posts(self):
         return self.posts.order_by('createdAt')[:5]
 
-
-
 class Post(models.Model):
     message = models.TextField(max_length = 5000)
     topic = models.ForeignKey(ChatTopic, related_name = 'posts',on_delete=models.CASCADE)

@@ -32,7 +32,6 @@ def home(request):
 #     context_object_name = 'boards'
 #     template_name = 'home.html'
 
-
 #FBV -board_topic
 # def board_topic(request,pk):
 #     #chat_board = ChatBoard.objects.get(pk=pk)
@@ -90,7 +89,6 @@ def new_board_topic(request, pk):
             return redirect('topic_posts', pk=pk,topic_pk=topic.pk)
     else:
         form = NewChatTopicForm()
-
     return render(request, 'new_board_topic.html', {'chat_board':chat_board, 'form':form})
 
 

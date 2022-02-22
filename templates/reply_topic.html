@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% load humanize %}
 {% block title %}Post a reply{% endblock %}
-
 
 {% block stylesheet %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -16,7 +14,6 @@
     </script>
 {% endblock %}
 
-
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Web Chat Boards</a></li>
   <li class="breadcrumb-item"><a href="{% url 'board_topic' topic.boardName.pk %}">{{ topic.boardName.name }}</a></li>
@@ -25,7 +22,6 @@
 {% endblock %}
 
 {% block content %}
-
   <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
@@ -47,5 +43,4 @@
       </div>
     </div>
   {% endfor %}
-
 {% endblock %}

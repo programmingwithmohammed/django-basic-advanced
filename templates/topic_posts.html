@@ -1,9 +1,7 @@
 {% extends 'base.html'%}
-
 {% load static %}
 {% load humanize %}
 {% block title %} {{ topic.subject }} {% endblock %}
-
 
 {% block stylesheet %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -23,12 +21,9 @@
 {% endblock %}
 
 {% block content %}
-
   <div class="mb-4">
     <a href="{% url 'reply_topic' topic.boardName.pk topic.pk %}" class="btn btn-primary" role="button">Reply</a>
   </div>
-
-
   {% for post in posts %}
   <div id="{{ post.pk }}" class="card {% if forloop.last %}mb-4{% else %}mb-2{% endif %} {% if forloop.first %} border-dark{% endif %}">
       {% if forloop.first %}
@@ -64,9 +59,7 @@
       </div>
     </div>
   {% endfor %}
-
   {% include 'includes/pagination.html' %}
-
 {% endblock %}
 
 <!--https://www.iconfinder.com/search/icons?q=avatar&price=free&license=2-->

@@ -20,11 +20,9 @@ def signup(request):
     else:
         #form = UserCreationForm()
         form = SignUpForm()
-
     return render(request, 'signup.html', {'form':form})
 
 #CBV -for my account
-
 @method_decorator(login_required, name='dispatch')
 class UserUpdateView(UpdateView):
     model = User

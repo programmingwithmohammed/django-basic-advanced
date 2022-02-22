@@ -3,8 +3,6 @@ from django import forms
 from .models import ChatTopic
 from .models import Post
 
-
-
 class NewChatTopicForm(forms.ModelForm):
     message = forms.CharField(
         widget = forms.Textarea(
@@ -17,7 +15,6 @@ class NewChatTopicForm(forms.ModelForm):
     class Meta:
         model = ChatTopic
         fields = ['subject', 'message']
-
 
 class PostForm(forms.ModelForm):
     class Meta:

@@ -4,7 +4,6 @@
 
 {% block title %}Edit post{% endblock %}
 
-
 {% block stylesheet %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 {% endblock %}
@@ -16,22 +15,18 @@
     </script>
 {% endblock %}
 
-
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">Web Chat Boards</a></li>
     <li class="breadcrumb-item"><a href="{% url 'board_topic' post.topic.boardName.pk %}">{{ post.topic.boardName.name }}</a></li>
     <li class="breadcrumb-item"><a href="{% url 'topic_posts' post.topic.boardName.pk post.topic.pk %}">{{ post.topic.subject }}</a></li>
     <li class="breadcrumb-item active">Edit</li>
-
 {% endblock %}
 
 {% block content %}
-
     <form method="post" class="md-4" novalidate>
         {% csrf_token %}
         {% include 'includes/form.html' %}
         <button type="submit" class="btn btn-success">Save changes</button>
         <a href="{% url 'topic_posts' post.topic.boardName.pk post.topic.pk %}" class ="btn btn-outline-secondary" role="button">Cancel</a>
     </form>
-
 {% endblock %}
