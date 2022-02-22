@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% load static %}
-
+{% load humanize %}
 {% block title %} {{ topic.subject }} {% endblock %}
 
 
@@ -48,7 +48,7 @@
                         <strong class="text-muted">{{ post.createdBy.username }}</strong>
                       </div>
                       <div class="col-6 text-right">
-                        <small class="text-muted">{{ post.createdAt }}</small>
+                        <small class="text-muted">{{ post.createdAt|naturaltime }}</small>
                       </div>
                 </div>
             {{ post.get_message_as_markdown }}
