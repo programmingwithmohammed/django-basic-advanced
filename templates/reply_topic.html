@@ -4,6 +4,19 @@
 
 {% block title %}Post a reply{% endblock %}
 
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE();
+    </script>
+{% endblock %}
+
+
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Web Chat Boards</a></li>
   <li class="breadcrumb-item"><a href="{% url 'board_topic' topic.boardName.pk %}">{{ topic.boardName.name }}</a></li>
@@ -13,7 +26,7 @@
 
 {% block content %}
 
-  <form method="post" class="mb-4">
+  <form method="post" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <button type="submit" class="btn btn-success">Post a reply</button>
@@ -30,7 +43,7 @@
             <small class="text-muted">{{ post.createdAt }}</small>
           </div>
         </div>
-        {{ post.message }}
+        {{ post.get_message_as_markdown }}
       </div>
     </div>
   {% endfor %}

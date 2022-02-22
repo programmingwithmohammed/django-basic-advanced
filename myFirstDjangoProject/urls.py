@@ -27,6 +27,10 @@ from django.urls import path
 urlpatterns = [
     path('', views.home, name='home'),#default home page path
     path('home/', views.home, name='home'),
+
+    #classbased view url
+    #re_path(r'^home/$',views.BoardListView.as_view(), name='home'),
+
     re_path(r'^signup/$',accounts_views.signup, name='signup'),
     re_path(r'^login/$',auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     re_path(r'^logout/$',auth_views.LogoutView.as_view(),name='logout'),
@@ -55,6 +59,9 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
         name='password_reset_complete'),
 
+    re_path(r'^setting/account/$',accounts_views.UserUpdateView.as_view(),
+            name='my_account'),
+
     #user changed password url
     re_path(r'^settings/password/$',
             auth_views.PasswordChangeView.as_view(template_name='password_change.html'),
@@ -63,15 +70,26 @@ urlpatterns = [
             auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'),
             name='password_change_done'),
 
-    re_path(r'^board_topic/(?P<pk>\d+)/$', views.board_topic, name='board_topic'),
+    #FBV url board_topic
+    #re_path(r'^board_topic/(?P<pk>\d+)/$', views.board_topic, name='board_topic'),
+    #CBV-url board_topic
+    re_path(r'^board_topic/(?P<pk>\d+)/$', views.TopicListView.as_view(),
+            name='board_topic'),
+
     re_path(r'^board_topic/(?P<pk>\d+)/new/$', views.new_board_topic, name='new_board_topic'),
 
     #both url path will work
-    re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$',
-            views.topic_posts, name='topic_posts'),
+    #FBV url topic_posts
+    # re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$',
+    #         views.topic_posts, name='topic_posts'),
 
     # path(r'^board_topic/int:pk/topics/int:topic_pk/',
     #         views.topic_posts, name='topic_posts'),
+
+    #CBV url topic_posts
+    re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$',
+            views.PostListView.as_view(), name='topic_posts'),
+
 
     re_path(r'^board_topic/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$',
             views.reply_topic, name='reply_topic'),

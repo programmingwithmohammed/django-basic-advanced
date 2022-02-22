@@ -1,7 +1,22 @@
 {% extends 'base.html'%}
 
-{% block title %}Edit post{% endblock %}
 {% load static %}
+
+{% block title %}Edit post{% endblock %}
+
+
+{% block stylesheet %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE();
+    </script>
+{% endblock %}
+
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">Web Chat Boards</a></li>
     <li class="breadcrumb-item"><a href="{% url 'board_topic' post.topic.boardName.pk %}">{{ post.topic.boardName.name }}</a></li>

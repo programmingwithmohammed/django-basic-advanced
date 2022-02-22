@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+
 {% block title %}
   {{ board.name }} - {{ block.super }}
 {% endblock %}
@@ -16,7 +18,7 @@
   <a href="{% url 'new_board_topic' chat_board.pk %}" class="btn btn-primary">New topic</a>
 </div>
 
-<table class="table">
+<table class="table mb-4">
     <thead class="thead-inverse">
       <tr>
         <th>Topic</th>
@@ -33,13 +35,59 @@
           <td>{{ topic.boardStarter.username }}</td>
           <td>{{ topic.replies }}</td>
           <td>{{ topic.views }}</td>
-          <td>{{ topic.lastUpdate }}</td>
+          <td>{{ topic.lastUpdate|naturaltime }}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 
-    {% if topics.has_other_pages %}
+  {% include 'includes/pagination.html' %}
+
+    <!--below code for CBV-->
+    <!--{% if is_paginated %}
+    <nav aria-label="Topics pagination" class="mb-4">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+          </li>
+        {% endif %}
+
+        {% for page_num in paginator.page_range %}
+          {% if page_obj.number == page_num %}
+            <li class="page-item active">
+              <span class="page-link">
+                {{ page_num }}
+                <span class="sr-only">(current)</span>
+              </span>
+            </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <span class="page-link">Next</span>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}-->
+
+
+    <!--below code for FBV-->
+    <!--{% if topics.has_other_pages %}
     <nav aria-label="Topics pagination" class="mb-4">
       <ul class="pagination">
         {% if topics.has_previous %}
@@ -78,5 +126,6 @@
         {% endif %}
       </ul>
     </nav>
-  {% endif %}
+  {% endif %}-->
+
 {% endblock %}

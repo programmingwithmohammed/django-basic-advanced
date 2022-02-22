@@ -16,32 +16,58 @@ from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
+from django.views.generic import ListView
+from django.urls import reverse_lazy
 
 
-
+#function based view home- FBC
 def home(request):
     chatBoard = ChatBoard.objects.all()
     return render(request, 'home.html',{'chatBoard':chatBoard})
 
-def board_topic(request,pk):
-    #chat_board = ChatBoard.objects.get(pk=pk)
-    chat_board = get_object_or_404(ChatBoard, pk=pk)
-
-    queryset = chat_board.topics.order_by('-lastUpdate').annotate(replies=Count('posts') -1)
-    page = request.GET.get('page',1)
-
-    paginator = Paginator(queryset, 10)
-
-    try:
-        topics = paginator.page(page)
-    except PageNotAnInteger:
-        topics = paginator.page(1)
-    except EmptyPage:
-        topics = paginator.page(paginator.num_pages)
+#class based view -home
+# class BoardListView(ListView):
+#     model = ChatBoard
+#     context_object_name = 'boards'
+#     template_name = 'home.html'
 
 
-    #topics = chat_board.topics.order_by('-lastUpdate').annotate(replies=Count('posts')-1)
-    return render(request, 'chat_board_topics.html', {'chat_board': chat_board, 'topics':topics})
+#FBV -board_topic
+# def board_topic(request,pk):
+#     #chat_board = ChatBoard.objects.get(pk=pk)
+#     chat_board = get_object_or_404(ChatBoard, pk=pk)
+
+#     queryset = chat_board.topics.order_by('-lastUpdate').annotate(replies=Count('posts') -1)
+#     page = request.GET.get('page',1)
+
+#     paginator = Paginator(queryset, 20)
+
+#     try:
+#         topics = paginator.page(page)
+#     except PageNotAnInteger:
+#         topics = paginator.page(1)
+#     except EmptyPage:
+#         topics = paginator.page(paginator.num_pages)
+
+#     #topics = chat_board.topics.order_by('-lastUpdate').annotate(replies=Count('posts')-1)
+#     return render(request, 'chat_board_topics.html', {'chat_board': chat_board, 'topics':topics})
+
+#CBV -board_topic
+class TopicListView(ListView):
+    model = ChatTopic
+    context_object_name = 'topics'
+    template_name = 'chat_board_topics.html'
+    paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+        kwargs['chat_board'] = self.chat_board
+        return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        self.chat_board = get_object_or_404(ChatBoard, pk = self.kwargs.get('pk'))
+        queryset = self.chat_board.topics.order_by('-lastUpdate').annotate(replies=Count('posts') - 1)
+        return queryset
+
 
 @login_required
 def new_board_topic(request, pk):
@@ -67,12 +93,30 @@ def new_board_topic(request, pk):
     return render(request, 'new_board_topic.html', {'chat_board':chat_board, 'form':form})
 
 
+#FBV-topic_posts
+# def topic_posts(request, pk, topic_pk):
+#     topic = get_object_or_404(ChatTopic, boardName__pk=pk, pk=topic_pk )
+#     topic.views += 1
+#     topic.save()
+#     return render(request, 'topic_posts.html', {'topic':topic})
 
-def topic_posts(request, pk, topic_pk):
-    topic = get_object_or_404(ChatTopic, boardName__pk=pk, pk=topic_pk )
-    topic.views += 1
-    topic.save()
-    return render(request, 'topic_posts.html', {'topic':topic})
+#CBV -topic_posts
+class PostListView(ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'topic_posts.html'
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        self.topic.views += 1
+        self.topic.save()
+        kwargs['topic'] = self.topic
+        return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        self.topic = get_object_or_404(ChatTopic,boardName__pk=self.kwargs.get('pk'), pk=self.kwargs.get('topic_pk'))
+        queryset = self.topic.posts.order_by('createdAt')
+        return queryset
 
 @login_required
 def reply_topic(request, pk, topic_pk):
@@ -89,6 +133,8 @@ def reply_topic(request, pk, topic_pk):
         form = PostForm()
     return render(request,'reply_topic.html', {'topic':topic, 'form':form})
 
+
+#CBV
 @method_decorator(login_required, name='dispatch')
 class PostUpdateView(UpdateView):
     model = Post
