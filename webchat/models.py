@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.text import Truncator
 from markdown import markdown
 from django.utils.html import mark_safe
+import math
 
 class ChatBoard(models.Model):
     name = models.CharField(max_length = 35, unique = True)
@@ -29,6 +30,27 @@ class ChatTopic(models.Model):
 
     def __str__(self):
         return self.subject
+
+    def get_page_count(self):
+        count = self.posts.count()
+        pages = count / 15
+        return math.ceil(pages)
+
+    def has_many_pages(self, count = None):
+        if count is None:
+            count = self.get_page_count()
+        return count > 6
+
+    def get_page_range(self):
+        count = self.get_page_count()
+        if self.has_many_pages(count):
+            return range(1,5)
+        return range(1, count + 1)
+
+    def get_last_five_posts(self):
+        return self.posts.order_by('createdAt')[:5]
+
+
 
 class Post(models.Model):
     message = models.TextField(max_length = 5000)

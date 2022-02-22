@@ -18,6 +18,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.generic import ListView
 from django.urls import reverse_lazy
+from django.urls import reverse
 
 
 #function based view home- FBC
@@ -57,7 +58,7 @@ class TopicListView(ListView):
     model = ChatTopic
     context_object_name = 'topics'
     template_name = 'chat_board_topics.html'
-    paginate_by = 20
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         kwargs['chat_board'] = self.chat_board
@@ -108,8 +109,13 @@ class PostListView(ListView):
     paginate_by = 3
 
     def get_context_data(self, **kwargs):
-        self.topic.views += 1
-        self.topic.save()
+
+        session_key = 'viewd_topic_{}'.format(self.topic.pk)
+        if not self.request.session.get(session_key, False):
+            self.topic.views += 1
+            self.topic.save()
+            self.request.session[session_key] = True
+
         kwargs['topic'] = self.topic
         return super().get_context_data(**kwargs)
 
@@ -128,7 +134,18 @@ def reply_topic(request, pk, topic_pk):
             post.topic = topic
             post.createdBy = request.user
             post.save()
-            return redirect('topic_posts', pk=pk, topic_pk=topic_pk)
+
+            topic.lastUpdate = timezone.now()
+            topic.save()
+
+            topic_url = reverse('topic_posts', kwargs={'pk':pk, 'topic_pk':topic_pk})
+            topic_post_url = '{url}?page={page}#{id}'.format(
+                url=topic_url,
+                id=post.pk,
+                page=topic.get_page_count()
+                )
+
+            return redirect(topic_post_url)
     else:
         form = PostForm()
     return render(request,'reply_topic.html', {'topic':topic, 'form':form})
