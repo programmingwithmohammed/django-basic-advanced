@@ -1,0 +1,6 @@
+django-env/
+.env
+
+#database file
+
+*.sqllite3
